@@ -1,0 +1,39 @@
+.login {
+  margin: 0;
+  padding: 0.5rem 1rem;
+
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  color: #ffffff;
+
+  background-color: #474747;
+
+  display: inline-block;
+  width: auto;
+
+  border: 2px solid #474747;
+  border-radius: 7px;
+}
+
+.register {
+  margin: 0;
+  padding: 0.5rem 1rem;
+
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+  text-decoration: none;
+  color: #00777d;
+
+  background-color: #ffffff;
+
+  display: inline-block;
+  width: auto;
+
+  border: 2px solid #00777d;
+  border-radius: 7px;
+}
