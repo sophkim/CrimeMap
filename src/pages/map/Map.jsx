@@ -1,26 +1,47 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
+const { kakao } = window;
 
-const options = {
-  //지도를 생성할 때 필요한 기본 옵션
-  center: new window.kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-  level: 3, //지도의 레벨(확대, 축소 정도)
-};
-
-function Map() {
-  const container = useRef(null); //지도를 담을 영역의 DOM 레퍼런스
-
+const Map = () => {
   useEffect(() => {
-    new window.kakao.maps.Map(container.current, options); //지도 생성 및 객체 리턴
-    return () => {};
+    const container = document.getElementById("myMap");
+
+    //지도 중심좌표 및 확대축소 레벨
+    const options = {
+      center: new kakao.maps.LatLng(33.450701, 126.570667),
+      level: 3,
+    };
+
+    //지도 생성
+    const map = new kakao.maps.Map(container, options);
+
+    //마커 생성
+    const marker = new kakao.maps.Marker({
+      position: options.center,
+    });
+
+    //지도 위에 마커 표시
+    marker.setMap(map);
+
+    // 지도 타입 컨트롤러 - 일반지도 & 스카이뷰
+    const mapTypeControl = new kakao.maps.MapTypeControl();
+
+    //지도에 컨트롤 추가
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+    //확대 축소 줌컨트롤러 추가
+    const zoomControl = new kakao.maps.ZoomControl();
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
   }, []);
 
   return (
     <div
-      className="map"
-      style={{ width: "650px", height: "600px" }}
-      ref={container}
+      id="myMap"
+      style={{
+        width: "650px",
+        height: "600px",
+      }}
     ></div>
   );
-}
+};
 
 export default Map;
