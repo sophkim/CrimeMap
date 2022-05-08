@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import "./map.css";
+
 const { kakao } = window;
 
 const Map = () => {
@@ -39,6 +41,9 @@ const Map = () => {
       style={{
         width: "650px",
         height: "600px",
+        position: "absolute",
+        right: "80px",
+        top: "150px",
       }}
     ></div>
   );
