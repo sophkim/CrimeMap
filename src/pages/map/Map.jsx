@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import "./map.css";
+import { Link } from "react-router-dom";
 
 const { Tmapv2 } = window;
 

@@ -12,6 +12,7 @@ import Container from "@mui/material/Container";
 //import MenuItem from "@mui/material/MenuItem";
 //import AdbIcon from "@mui/icons-material/Adb";
 import "./header.css";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -32,16 +33,20 @@ const Header = () => {
                 variant="text"
                 sx={{ color: "black", display: { fontWeight: "bold" } }}
               >
-                {" "}
-                메인분석화면{" "}
+                메인분석화면
               </Button>
+
               <Button
                 variant="text"
-                sx={{ color: "black", ml: 10, display: { fontWeight: "bold" } }}
+                sx={{
+                  color: "black",
+                  ml: 10,
+                  display: { fontWeight: "bold" },
+                }}
               >
-                {" "}
-                지도/경로추천{" "}
+                지도/경로추천
               </Button>
+
               <Button
                 variant="text"
                 sx={{ color: "black", ml: 10, display: { fontWeight: "bold" } }}
