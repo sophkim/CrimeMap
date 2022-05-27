@@ -12,7 +12,7 @@ const Map = () => {
       zoom: 15,
     });
 
-    let marker_s, marker_e, marker;
+    let marker_s, marker_e, marker, cctv;
 
     //시작 마커
     marker_s = new Tmapv2.Marker({
@@ -73,7 +73,15 @@ const Map = () => {
       map: map,
     });
 
-    var headers = {};
+    // CCTV 마커 생성
+    cctv = new Tmapv2.Marker({
+      position: new Tmapv2.LatLng(37.566481622437934, 126.98502302169841),
+      icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_c.png",
+      iconSize: new Tmapv2.Size(16, 24),
+      map: map, //Marker가 표시될 Map 설정.
+    });
+
+    let headers = {};
     headers["appKey"] = "l7xxf4d6ce3985d1419b9a268be498b40d48";
 
     axios.get({
