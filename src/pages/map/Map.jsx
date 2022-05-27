@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
+import cctvData from "./cctvData.json";
 import "./map.css";
 
 const { Tmapv2 } = window;
@@ -73,134 +74,14 @@ const Map = () => {
       map: map,
     });
 
+    let cctvMarker = JSON.stringify(cctvData);
+
     // CCTV 마커 생성
     cctv = new Tmapv2.Marker({
       position: new Tmapv2.LatLng(37.566481622437934, 126.98502302169841),
       icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_c.png",
       iconSize: new Tmapv2.Size(16, 24),
       map: map, //Marker가 표시될 Map 설정.
-    });
-
-    let headers = {};
-    headers["appKey"] = "l7xxf4d6ce3985d1419b9a268be498b40d48";
-
-    axios.get({
-      type: "POST",
-      headers: headers,
-      url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization10?version=1&format=json", //
-      async: false,
-      contentType: "application/json",
-      data: JSON.stringify({
-        reqCoordType: "WGS84GEO",
-        resCoordType: "EPSG3857",
-        startName: "출발",
-        startX: "126.98605733268329",
-        startY: "37.568085523663385",
-        startTime: "201711121314",
-        endName: "도착",
-        endX: "127.00973587385866",
-        endY: "37.56445848334345",
-        searchOption: "0",
-        viaPoints: [
-          {
-            viaPointId: "test01",
-            viaPointName: "test01",
-            viaX: "126.98735015742581",
-            viaY: "37.56626352138058",
-          },
-          {
-            viaPointId: "test02",
-            viaPointName: "test02",
-            viaX: "127.00221495976581",
-            viaY: "37.56568310756034",
-          },
-          {
-            viaPointId: "test03",
-            viaPointName: "test03",
-            viaX: "126.992153",
-            viaY: "37.570369",
-          },
-          {
-            viaPointId: "test04",
-            viaPointName: "test04",
-            viaX: "127.00352387777271",
-            viaY: "37.56335290252303",
-          },
-          {
-            viaPointId: "test05",
-            viaPointName: "test05",
-            viaX: "127.00186090818215",
-            viaY: "37.570721714117965",
-          },
-          {
-            viaPointId: "test06",
-            viaPointName: "test06",
-            viaX: "126.99066536776698",
-            viaY: "37.56515390827723",
-          },
-        ],
-      }),
-      success: function (response) {
-        var resultData = response.properties;
-        var resultFeatures = response.features;
-
-        // 결과 출력
-        var tDistance =
-          "총 거리 : " + (resultData.totalDistance / 1000).toFixed(1) + "km,  ";
-        var tTime =
-          "총 시간 : " + (resultData.totalTime / 60).toFixed(0) + "분,  ";
-        var tFare = "총 요금 : " + resultData.totalFare + "원";
-
-        document.getElementById("result").text(tDistance + tTime + tFare);
-        //$("#result").text(tDistance + tTime + tFare);
-
-        for (var i in resultFeatures) {
-          var geometry = resultFeatures[i].geometry;
-          var properties = resultFeatures[i].properties;
-          var polyline_;
-
-          let drawInfoArr = [];
-
-          if (geometry.type == "LineString") {
-            for (var j in geometry.coordinates) {
-              // 경로들의 결과값(구간)들을 포인트 객체로 변환
-              var latlng = new Tmapv2.Point(
-                geometry.coordinates[j][0],
-                geometry.coordinates[j][1]
-              );
-              // 포인트 객체를 받아 좌표값으로 변환
-              var convertPoint =
-                new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(latlng);
-              // 포인트객체의 정보로 좌표값 변환 객체로 저장
-              var convertChange = new Tmapv2.LatLng(
-                convertPoint._lat,
-                convertPoint._lng
-              );
-
-              drawInfoArr.push(convertChange);
-            }
-
-            polyline_ = new Tmapv2.Polyline({
-              path: drawInfoArr,
-              strokeColor: "#FF0000",
-              strokeWeight: 6,
-              map: map,
-            });
-          }
-        }
-      },
-      error: function (request, status, error) {
-        console.log(
-          "code:" +
-            request.status +
-            "\n" +
-            "message:" +
-            request.responseText +
-            "\n" +
-            "error:" +
-            error
-        );
-      },
     });
   }, []);
 
