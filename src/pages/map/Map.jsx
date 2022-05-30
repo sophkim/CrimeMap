@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-//import axios from "axios";
+import axios from "axios";
 import "./map.css";
 import $ from "jquery";
 
@@ -187,7 +187,7 @@ const Map = () => {
       },
     });
 
-    // 2. POI 통합 검색 API 요청
+    // POI 통합 검색 API 요청
     var markerArr = [];
 
     $("#btn_select").click(function () {
@@ -277,8 +277,10 @@ const Map = () => {
     <div className="Map">
       <div className="sidebar">
         <input
-          className="sidebarStart"
           type="text"
+          className="text_custom"
+          id="searchKeyword"
+          name="searchKeyword"
           placeholder="출발지를 입력해주세요."
         ></input>
         <div className="sidebarEnd"></div>
@@ -287,15 +289,30 @@ const Map = () => {
           type="text"
           placeholder="도착지를 입력해주세요."
         ></input>
-        <button className="sidebarBtn">시작하기</button>
+        <button id="btn_select">시작하기</button>
       </div>
+
       <div className="sidebar2">
+        <div className="title"></div>
+        <div className="rst_wrap">
+          <div className="rst mCustomScrollbar">
+            <ul id="searchResult" name="searchResult">
+              <p>
+                안전경로를 추천해 줍니다:)
+                <br />
+                우선 출발지와 도착지를 입력해주세요!
+              </p>
+            </ul>
+          </div>
+        </div>
+      </div>
+      {/* <div className="sidebar2">
         <p>
           안전경로를 추천해 줍니다:)
           <br />
           우선 출발지와 도착지를 입력해주세요!
         </p>
-      </div>
+      </div> */}
       <div
         id="myMap"
         style={{
