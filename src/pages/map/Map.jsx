@@ -190,7 +190,7 @@ const Map = () => {
     // POI 통합 검색 API 요청
     var markerArr = [];
 
-    $("#btn_select").click(function () {
+    $("#btn_select").mouseenter(function () {
       var searchKeyword = $("#searchKeyword").val();
       $.ajax({
         method: "GET",
