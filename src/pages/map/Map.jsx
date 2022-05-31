@@ -216,6 +216,7 @@ const Map = () => {
             var innerHtml = ""; // Search Reulsts 결과값 노출 위한 변수
             var positionBounds = new Tmapv2.LatLngBounds(); //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
 
+            // 결과값 리스트 생성
             for (var k in resultpoisData) {
               var noorLat = Number(resultpoisData[k].noorLat);
               var noorLon = Number(resultpoisData[k].noorLon);
@@ -230,9 +231,9 @@ const Map = () => {
 
               var markerPosition = new Tmapv2.LatLng(lat, lon);
 
+              // 마커 형태로 표시
               marker = new Tmapv2.Marker({
                 position: markerPosition,
-                //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
                 icon:
                   "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" +
                   k +
@@ -309,13 +310,6 @@ const Map = () => {
           </div>
         </div>
       </div>
-      {/* <div className="sidebar2">
-        <p>
-          안전경로를 추천해 줍니다:)
-          <br />
-          우선 출발지와 도착지를 입력해주세요!
-        </p>
-      </div> */}
       <div
         id="myMap"
         style={{
