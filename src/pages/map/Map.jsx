@@ -81,7 +81,7 @@ const Map = () => {
     $.ajax({
       type: "POST",
       headers: headers,
-      url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization10?version=1&format=json", //
+      url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization30?version=1&format=json", //
       async: false,
       contentType: "application/json",
       data: JSON.stringify({
@@ -190,86 +190,87 @@ const Map = () => {
     // POI 통합 검색 API 요청
     var markerArr = [];
 
-    $("#btn_select").mouseenter(function () {
-      var searchKeyword = $("#searchKeyword").val();
-      $.ajax({
-        method: "GET",
-        url: "https://apis.openapi.sk.com/tmap/pois?version=1&format=json&callback=result",
-        async: false,
-        data: {
-          appKey: "l7xxf4d6ce3985d1419b9a268be498b40d48",
-          searchKeyword: searchKeyword,
-          resCoordType: "EPSG3857",
-          reqCoordType: "WGS84GEO",
-          count: 10,
-        },
-        success: function (response) {
-          var resultpoisData = response.searchPoiInfo.pois.poi;
+    $("#searchKeyword").keydown(function (key) {
+      if (key.keyCode === 13) {
+        var searchKeyword = $("#searchKeyword").val();
+        $.ajax({
+          method: "GET",
+          url: "https://apis.openapi.sk.com/tmap/pois?version=1&format=json&callback=result",
+          async: false,
+          data: {
+            appKey: "l7xxf4d6ce3985d1419b9a268be498b40d48",
+            searchKeyword: searchKeyword,
+            resCoordType: "EPSG3857",
+            reqCoordType: "WGS84GEO",
+            count: 10,
+          },
+          success: function (response) {
+            var resultpoisData = response.searchPoiInfo.pois.poi;
 
-          // 기존 마커, 팝업 제거
-          if (markerArr.length > 0) {
-            for (var i in markerArr) {
-              markerArr[i].setMap(null);
+            // 기존 마커, 팝업 제거
+            if (markerArr.length > 0) {
+              for (var i in markerArr) {
+                markerArr[i].setMap(null);
+              }
             }
-          }
-          var innerHtml = ""; // Search Reulsts 결과값 노출 위한 변수
-          var positionBounds = new Tmapv2.LatLngBounds(); //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
+            var innerHtml = ""; // Search Reulsts 결과값 노출 위한 변수
+            var positionBounds = new Tmapv2.LatLngBounds(); //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
 
-          for (var k in resultpoisData) {
-            var noorLat = Number(resultpoisData[k].noorLat);
-            var noorLon = Number(resultpoisData[k].noorLon);
-            var name = resultpoisData[k].name;
+            for (var k in resultpoisData) {
+              var noorLat = Number(resultpoisData[k].noorLat);
+              var noorLon = Number(resultpoisData[k].noorLon);
+              var name = resultpoisData[k].name;
 
-            var pointCng = new Tmapv2.Point(noorLon, noorLat);
-            var projectionCng = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(
-              pointCng
-            );
+              var pointCng = new Tmapv2.Point(noorLon, noorLat);
+              var projectionCng =
+                new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(pointCng);
 
-            var lat = projectionCng._lat;
-            var lon = projectionCng._lng;
+              var lat = projectionCng._lat;
+              var lon = projectionCng._lng;
 
-            var markerPosition = new Tmapv2.LatLng(lat, lon);
+              var markerPosition = new Tmapv2.LatLng(lat, lon);
 
-            marker = new Tmapv2.Marker({
-              position: markerPosition,
-              //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
-              icon:
-                "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" +
+              marker = new Tmapv2.Marker({
+                position: markerPosition,
+                //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
+                icon:
+                  "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" +
+                  k +
+                  ".png",
+                iconSize: new Tmapv2.Size(24, 38),
+                title: name,
+                map: map,
+              });
+
+              innerHtml +=
+                "<li><img src='http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" +
                 k +
-                ".png",
-              iconSize: new Tmapv2.Size(24, 38),
-              title: name,
-              map: map,
-            });
+                ".png' style='vertical-align:middle;'/><span>" +
+                name +
+                "</span></li>";
 
-            innerHtml +=
-              "<li><img src='http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" +
-              k +
-              ".png' style='vertical-align:middle;'/><span>" +
-              name +
-              "</span></li>";
+              markerArr.push(marker);
+              positionBounds.extend(markerPosition); // LatLngBounds의 객체 확장
+            }
 
-            markerArr.push(marker);
-            positionBounds.extend(markerPosition); // LatLngBounds의 객체 확장
-          }
-
-          $("#searchResult").html(innerHtml); //searchResult 결과값 노출
-          map.panToBounds(positionBounds); // 확장된 bounds의 중심으로 이동시키기
-          map.zoomOut();
-        },
-        error: function (request, status, error) {
-          console.log(
-            "code:" +
-              request.status +
-              "\n" +
-              "message:" +
-              request.responseText +
-              "\n" +
-              "error:" +
-              error
-          );
-        },
-      });
+            $("#searchResult").html(innerHtml); //searchResult 결과값 노출
+            map.panToBounds(positionBounds); // 확장된 bounds의 중심으로 이동시키기
+            map.zoomOut();
+          },
+          error: function (request, status, error) {
+            console.log(
+              "code:" +
+                request.status +
+                "\n" +
+                "message:" +
+                request.responseText +
+                "\n" +
+                "error:" +
+                error
+            );
+          },
+        });
+      }
     });
   }, []);
 
@@ -278,15 +279,17 @@ const Map = () => {
       <div className="sidebar">
         <input
           type="text"
-          className="text_custom"
+          className="searchKeyword"
           id="searchKeyword"
           name="searchKeyword"
           placeholder="출발지를 입력해주세요."
         ></input>
         <div className="sidebarEnd"></div>
         <input
-          className="sidebarStart"
           type="text"
+          className="endKey"
+          id="endKey"
+          name="endKey"
           placeholder="도착지를 입력해주세요."
         ></input>
         <button id="btn_select">시작하기</button>
