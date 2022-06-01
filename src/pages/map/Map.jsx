@@ -255,13 +255,22 @@ const Map = () => {
 
               //marker 클릭 시 출발 지점으로 설정
               marker.addListener("click", function (evt) {
+                for (var i in markerArr) {
+                  markerArr[i].setMap(null);
+                }
+
                 marker_s = new Tmapv2.Marker({
-                  position: markerPosition,
+                  position: new Tmapv2.LatLng(
+                    resultpoisData.noorLat,
+                    resultpoisData.noorLon
+                  ),
                   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
                   iconSize: new Tmapv2.Size(24, 38),
                   map: map,
                 });
-                console.log("clicked!!");
+
+                console.log(resultpoisData.noorLat, resultpoisData.noorLon);
+                console.log(resultpoisData);
               });
             }
 
