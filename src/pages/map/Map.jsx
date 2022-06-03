@@ -87,11 +87,7 @@ const Map = () => {
 
                   //출발지 마커 클릭 이벤트
                   function startP(e) {
-                    if (typeof marker_s == "undefined") {
-                      for (var i in markerArr) {
-                        markerArr[i].setMap(null);
-                      }
-
+                    if (typeof marker_s === "undefined") {
                       lonlat = e.latLng;
 
                       marker_s = new Tmapv2.Marker({
@@ -101,8 +97,13 @@ const Map = () => {
                         map: map,
                       });
 
+                      for (var i in markerArr) {
+                        markerArr[i].setMap(null);
+                      }
+
                       $("#searchResult").html("도착지를 설정하세요!");
                       markerArr.push(marker);
+                      //console.log(marker_s.getPosition()._lat);
                     }
                   }
                 }
@@ -247,15 +248,17 @@ const Map = () => {
       headers["appKey"] = "l7xxf4d6ce3985d1419b9a268be498b40d48";
 
       $("#btn_select").click(function (key) {
-        //시작 마커
-        marker_s = new Tmapv2.Marker({
-          position: new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
-          icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-          iconSize: new Tmapv2.Size(24, 38),
-          map: map,
-        });
+        //console.log(marker_s.getPosition()._lat);
 
-        // 도착 마커
+        //시작 마커
+        // marker_s = new Tmapv2.Marker({
+        //   position: new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
+        //   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+        //   iconSize: new Tmapv2.Size(24, 38),
+        //   map: map,
+        // });
+
+        //도착 마커
         marker_e = new Tmapv2.Marker({
           position: new Tmapv2.LatLng(37.56445848334345, 127.00973587385866),
           icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
@@ -263,7 +266,7 @@ const Map = () => {
           map: map,
         });
 
-        //경유지 6개
+        //경유지 2개
         marker = new Tmapv2.Marker({
           position: new Tmapv2.LatLng(37.56626352138058, 126.98735015742581),
           icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_1.png",
