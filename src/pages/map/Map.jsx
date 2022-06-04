@@ -251,12 +251,12 @@ const Map = () => {
         //console.log(marker_s.getPosition()._lat);
 
         //시작 마커
-        marker_s = new Tmapv2.Marker({
-          position: new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
-          icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-          iconSize: new Tmapv2.Size(24, 38),
-          map: map,
-        });
+        // marker_s = new Tmapv2.Marker({
+        //   position: new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
+        //   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+        //   iconSize: new Tmapv2.Size(24, 38),
+        //   map: map,
+        // });
 
         //도착 마커
         marker_e = new Tmapv2.Marker({
@@ -281,6 +281,10 @@ const Map = () => {
           map: map,
         });
 
+        // 출발지 위경도를 객체로 바꾼후 ajax POST에서 JSON으로 바꾸어 대입하는 과정
+        var startX = new Number(marker_s.getPosition()._lng);
+        var startY = new Number(marker_s.getPosition()._lat);
+
         //경로 선 그리기
         let headers = {};
         headers["appKey"] = "l7xxf4d6ce3985d1419b9a268be498b40d48";
@@ -288,15 +292,15 @@ const Map = () => {
         $.ajax({
           type: "POST",
           headers: headers,
-          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization20?version=1&format=json", //
+          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization10?version=1&format=json", //
           async: false,
           contentType: "application/json",
           data: JSON.stringify({
             reqCoordType: "WGS84GEO",
             resCoordType: "EPSG3857",
             startName: "출발",
-            startX: "126.98605733268329",
-            startY: "37.568085523663385",
+            startX: "startX",
+            startY: "startY",
             startTime: "201711121314",
             endName: "도착",
             endX: "127.00973587385866",
@@ -317,6 +321,7 @@ const Map = () => {
               },
             ],
           }),
+
           success: function (response) {
             var resultData = response.properties;
             var resultFeatures = response.features;
@@ -369,6 +374,7 @@ const Map = () => {
             );
           },
         });
+
         //경로구현 끝
       });
     }, //useEffect
