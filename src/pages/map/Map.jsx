@@ -251,12 +251,12 @@ const Map = () => {
         //console.log(marker_s.getPosition()._lat);
 
         //시작 마커
-        // marker_s = new Tmapv2.Marker({
-        //   position: new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
-        //   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-        //   iconSize: new Tmapv2.Size(24, 38),
-        //   map: map,
-        // });
+        marker_s = new Tmapv2.Marker({
+          position: new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
+          icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
+          iconSize: new Tmapv2.Size(24, 38),
+          map: map,
+        });
 
         //도착 마커
         marker_e = new Tmapv2.Marker({
@@ -288,7 +288,7 @@ const Map = () => {
         $.ajax({
           type: "POST",
           headers: headers,
-          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization10?version=1&format=json", //
+          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization20?version=1&format=json", //
           async: false,
           contentType: "application/json",
           data: JSON.stringify({
