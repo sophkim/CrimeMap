@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-//import axios from "axios";
+import axios from "axios";
 import "./map.css";
 import $ from "jquery";
 
@@ -22,6 +22,8 @@ const Map = () => {
         function (key) {
           if (key.keyCode === 13) {
             var searchKeyword = $("#startPoint").val();
+            console.log(searchKeyword);
+            console.log(typeof searchKeyword);
             $.ajax({
               method: "GET",
               url: "https://apis.openapi.sk.com/tmap/pois?version=1&format=json&callback=result",
@@ -214,7 +216,7 @@ const Map = () => {
                         map: map,
                       });
 
-                      $("#searchResult").html("도착지를 설정하세요!");
+                      $("#searchResult").html("안전경로를 확인해보세요!");
                       markerArr.push(marker);
                     }
                   }
@@ -282,8 +284,19 @@ const Map = () => {
         });
 
         // 출발지 위경도를 객체로 바꾼후 ajax POST에서 JSON으로 바꾸어 대입하는 과정
-        var startX = new Number(marker_s.getPosition()._lng);
-        var startY = new Number(marker_s.getPosition()._lat);
+        //var startX = new Number(marker_s.getPosition()._lng);
+        //var startY = new Number(marker_s.getPosition()._lat);
+
+        //let startX = { startX: marker_s.getPosition()._lng };
+        //let startY = { startY: marker_s.getPosition()._lat };
+
+        // var startX = JSON.parse(marker_s.getPosition()._lng);
+        // var startY = JSON.parse(marker_s.getPosition()._lat);
+
+        var pointx = new Number(marker_s.getPosition()._lng);
+        var pointy = new Number(marker_s.getPosition()._lat);
+        console.log(pointx);
+        console.log(typeof pointx);
 
         //경로 선 그리기
         let headers = {};
@@ -299,9 +312,9 @@ const Map = () => {
             reqCoordType: "WGS84GEO",
             resCoordType: "EPSG3857",
             startName: "출발",
-            startX: "startX",
-            startY: "startY",
-            startTime: "201711121314",
+            startX: pointx,
+            startY: pointy,
+            startTime: "202111121314",
             endName: "도착",
             endX: "127.00973587385866",
             endY: "37.56445848334345",
