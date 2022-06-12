@@ -21,7 +21,7 @@ const Map = () => {
       //   var param = {
       //     name: "치안사고통계(전체)",
       //     serverUrl:
-      //       "www.safemap.go.kr/sm/apis.do?apikey=[DFU3CGVL-DFU3-DFU3-DFU3-DFU3CGVLH9]&layer=A2SM_CRMNLSTATS&style=A2SM_CrmnlStats_Tot",
+      //       "www.safemap.go.kr/sm/apis.do?apikey=DFU3CGVL-DFU3-DFU3-DFU3-DFU3CGVLH9&layer=A2SM_CRMNLSTATS&style=A2SM_CrmnlStats_Tot",
       //     layername: "A2SM_CRMNLSTATS",
       //     styles: "A2SM_CrmnlStats_Tot",
       //   };
@@ -119,7 +119,7 @@ const Map = () => {
                       marker_s = new Tmapv2.Marker({
                         position: new Tmapv2.LatLng(lonlat.lat(), lonlat.lng()),
                         icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-                        iconSize: new Tmapv2.Size(24, 38),
+                        iconSize: new Tmapv2.Size(36, 54),
                         map: map,
                       });
 
@@ -235,10 +235,9 @@ const Map = () => {
                       marker_e = new Tmapv2.Marker({
                         position: new Tmapv2.LatLng(lonlat.lat(), lonlat.lng()),
                         icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
-                        iconSize: new Tmapv2.Size(24, 38),
+                        iconSize: new Tmapv2.Size(36, 54),
                         map: map,
                       });
-
                       $("#searchResult").html("안전경로를 확인해보세요!");
                       markerArr.push(marker);
                     }
@@ -297,12 +296,12 @@ const Map = () => {
           map: map,
         });
 
-        marker = new Tmapv2.Marker({
-          position: new Tmapv2.LatLng(37.56568310756034, 127.00221495976581),
-          icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_2.png",
-          iconSize: new Tmapv2.Size(24, 38),
-          map: map,
-        });
+        // marker = new Tmapv2.Marker({
+        //   position: new Tmapv2.LatLng(37.56568310756034, 127.00221495976581),
+        //   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_2.png",
+        //   iconSize: new Tmapv2.Size(24, 38),
+        //   map: map,
+        // });
 
         //경로 그리기
         let headers = {};
@@ -311,7 +310,7 @@ const Map = () => {
         $.ajax({
           type: "POST",
           headers: headers,
-          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization20?version=1&format=json", //
+          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization10?version=1&format=json", //
           async: false,
           contentType: "application/json",
           data: JSON.stringify({
@@ -332,12 +331,12 @@ const Map = () => {
                 viaX: "126.98735015742581",
                 viaY: "37.56626352138058",
               },
-              {
-                viaPointId: "test02",
-                viaPointName: "test02",
-                viaX: "127.00221495976581",
-                viaY: "37.56568310756034",
-              },
+              // {
+              //   viaPointId: "test02",
+              //   viaPointName: "test02",
+              //   viaX: "127.00221495976581",
+              //   viaY: "37.56568310756034",
+              // },
             ],
           }),
 
