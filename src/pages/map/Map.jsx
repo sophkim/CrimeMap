@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import "./map.css";
 import $ from "jquery";
+//import OpenLayers from "openlayers";
+//import proj4 from "proj4/dist/proj4";
 
 const { Tmapv2 } = window;
 
@@ -14,6 +16,30 @@ const Map = () => {
         zoom: 15,
       });
 
+      // 생활안전지도
+      // function addWmsLayer() {
+      //   var param = {
+      //     name: "치안사고통계(전체)",
+      //     serverUrl:
+      //       "www.safemap.go.kr/sm/apis.do?apikey=[DFU3CGVL-DFU3-DFU3-DFU3-DFU3CGVLH9]&layer=A2SM_CRMNLSTATS&style=A2SM_CrmnlStats_Tot",
+      //     layername: "A2SM_CRMNLSTATS",
+      //     styles: "A2SM_CrmnlStats_Tot",
+      //   };
+      //   var wmsLayer = new OpenLayers.Layer.WMS(
+      //     param.name,
+      //     param.serverUrl,
+      //     {
+      //       layers: "" + param.layername,
+      //       styles: param.styles,
+      //       format: "image/png",
+      //       exceptions: "text/xml",
+      //       transparent: true,
+      //     },
+      //     { isBaseLayer: false }
+      //   );
+      //   map.addLayer(wmsLayer);
+      // }
+
       // 출발지 설정 - POI 통합 검색 API 요청
       var markerArr = [];
       var lonlat;
@@ -22,8 +48,6 @@ const Map = () => {
         function (key) {
           if (key.keyCode === 13) {
             var searchKeyword = $("#startPoint").val();
-            console.log(searchKeyword);
-            console.log(typeof searchKeyword);
             $.ajax({
               method: "GET",
               url: "https://apis.openapi.sk.com/tmap/pois?version=1&format=json&callback=result",
@@ -105,7 +129,6 @@ const Map = () => {
 
                       $("#searchResult").html("도착지를 설정하세요!");
                       markerArr.push(marker);
-                      //console.log(marker_s.getPosition()._lat);
                     }
                   }
                 }
@@ -250,8 +273,6 @@ const Map = () => {
       headers["appKey"] = "l7xxf4d6ce3985d1419b9a268be498b40d48";
 
       $("#btn_select").click(function (key) {
-        //console.log(marker_s.getPosition()._lat);
-
         //시작 마커
         // marker_s = new Tmapv2.Marker({
         //   position: new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
@@ -261,12 +282,12 @@ const Map = () => {
         // });
 
         //도착 마커
-        marker_e = new Tmapv2.Marker({
-          position: new Tmapv2.LatLng(37.56445848334345, 127.00973587385866),
-          icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
-          iconSize: new Tmapv2.Size(24, 38),
-          map: map,
-        });
+        // marker_e = new Tmapv2.Marker({
+        //   position: new Tmapv2.LatLng(37.56445848334345, 127.00973587385866),
+        //   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
+        //   iconSize: new Tmapv2.Size(24, 38),
+        //   map: map,
+        // });
 
         //경유지 2개
         marker = new Tmapv2.Marker({
@@ -283,41 +304,26 @@ const Map = () => {
           map: map,
         });
 
-        // 출발지 위경도를 객체로 바꾼후 ajax POST에서 JSON으로 바꾸어 대입하는 과정
-        //var startX = new Number(marker_s.getPosition()._lng);
-        //var startY = new Number(marker_s.getPosition()._lat);
-
-        //let startX = { startX: marker_s.getPosition()._lng };
-        //let startY = { startY: marker_s.getPosition()._lat };
-
-        // var startX = JSON.parse(marker_s.getPosition()._lng);
-        // var startY = JSON.parse(marker_s.getPosition()._lat);
-
-        var pointx = new Number(marker_s.getPosition()._lng);
-        var pointy = new Number(marker_s.getPosition()._lat);
-        console.log(pointx);
-        console.log(typeof pointx);
-
-        //경로 선 그리기
+        //경로 그리기
         let headers = {};
         headers["appKey"] = "l7xxf4d6ce3985d1419b9a268be498b40d48";
 
         $.ajax({
           type: "POST",
           headers: headers,
-          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization10?version=1&format=json", //
+          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization20?version=1&format=json", //
           async: false,
           contentType: "application/json",
           data: JSON.stringify({
             reqCoordType: "WGS84GEO",
             resCoordType: "EPSG3857",
             startName: "출발",
-            startX: "${pointx}",
-            startY: "${pointy}",
+            startX: String(marker_s.getPosition()._lng),
+            startY: String(marker_s.getPosition()._lat),
             startTime: "202111121314",
             endName: "도착",
-            endX: "127.00973587385866",
-            endY: "37.56445848334345",
+            endX: String(marker_e.getPosition()._lng),
+            endY: String(marker_e.getPosition()._lat),
             searchOption: "0",
             viaPoints: [
               {
@@ -338,6 +344,8 @@ const Map = () => {
           success: function (response) {
             var resultData = response.properties;
             var resultFeatures = response.features;
+
+            console.log(resultFeatures);
 
             for (var i in resultFeatures) {
               var geometry = resultFeatures[i].geometry;
@@ -386,9 +394,7 @@ const Map = () => {
                 error
             );
           },
-        });
-
-        //경로구현 끝
+        }); //경로 그리기
       });
     }, //useEffect
     []
