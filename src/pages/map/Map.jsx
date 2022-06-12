@@ -62,7 +62,7 @@ const Map = () => {
               success: function (response) {
                 var resultpoisData = response.searchPoiInfo.pois.poi;
 
-                // 기존 마커, 팝업 제거
+                // 기존 마커 제거
                 if (markerArr.length > 0) {
                   for (var i in markerArr) {
                     markerArr[i].setMap(null);
@@ -175,14 +175,14 @@ const Map = () => {
               success: function (response) {
                 var resultpoisData = response.searchPoiInfo.pois.poi;
 
-                // 기존 마커, 팝업 제거
+                // 기존 마커 제거
                 if (markerArr.length > 0) {
                   for (var i in markerArr) {
                     markerArr[i].setMap(null);
                   }
                 }
-                var innerHtml = ""; // Search Reulsts 결과값 노출 위한 변수
-                var positionBounds = new Tmapv2.LatLngBounds(); //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
+                var innerHtml = "";
+                var positionBounds = new Tmapv2.LatLngBounds();
 
                 // 결과값 리스트 생성
                 for (var k in resultpoisData) {
@@ -272,36 +272,43 @@ const Map = () => {
       headers["appKey"] = "l7xxf4d6ce3985d1419b9a268be498b40d48";
 
       $("#btn_select").click(function (key) {
-        //시작 마커
-        // marker_s = new Tmapv2.Marker({
-        //   position: new Tmapv2.LatLng(37.568085523663385, 126.98605733268329),
-        //   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
-        //   iconSize: new Tmapv2.Size(24, 38),
-        //   map: map,
-        // });
+        // 두 점 사이 직선 거리
+        var distance = marker_s
+          .getPosition()
+          .distanceTo(marker_e.getPosition());
+        console.log(distance);
 
-        //도착 마커
-        // marker_e = new Tmapv2.Marker({
-        //   position: new Tmapv2.LatLng(37.56445848334345, 127.00973587385866),
-        //   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
-        //   iconSize: new Tmapv2.Size(24, 38),
-        //   map: map,
-        // });
+        //원 - 출발지 기준
+        var circle = new Tmapv2.Circle({
+          center: new Tmapv2.LatLng(
+            marker_s.getPosition()._lat,
+            marker_s.getPosition()._lng
+          ),
+          radius: distance / 2,
+          strokeColor: "red",
+          fillColor: "greed",
+          map: map,
+        });
 
-        //경유지 2개
+        //원 - 도착지 기준
+        var circle = new Tmapv2.Circle({
+          center: new Tmapv2.LatLng(
+            marker_e.getPosition()._lat,
+            marker_e.getPosition()._lng
+          ),
+          radius: distance / 2,
+          strokeColor: "red",
+          fillColor: "greed",
+          map: map,
+        });
+
+        //경유지
         marker = new Tmapv2.Marker({
           position: new Tmapv2.LatLng(37.56626352138058, 126.98735015742581),
           icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_1.png",
           iconSize: new Tmapv2.Size(24, 38),
           map: map,
         });
-
-        // marker = new Tmapv2.Marker({
-        //   position: new Tmapv2.LatLng(37.56568310756034, 127.00221495976581),
-        //   icon: "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_2.png",
-        //   iconSize: new Tmapv2.Size(24, 38),
-        //   map: map,
-        // });
 
         //경로 그리기
         let headers = {};
@@ -331,12 +338,6 @@ const Map = () => {
                 viaX: "126.98735015742581",
                 viaY: "37.56626352138058",
               },
-              // {
-              //   viaPointId: "test02",
-              //   viaPointName: "test02",
-              //   viaX: "127.00221495976581",
-              //   viaY: "37.56568310756034",
-              // },
             ],
           }),
 
@@ -355,15 +356,13 @@ const Map = () => {
 
               if (geometry.type === "LineString") {
                 for (var j in geometry.coordinates) {
-                  // 경로들의 결과값(구간)들을 포인트 객체로 변환
+                  // 경로들의 결과값을 포인트 객체로 변환
                   var latlng = new Tmapv2.Point(
                     geometry.coordinates[j][0],
                     geometry.coordinates[j][1]
                   );
-                  // 포인트 객체를 받아 좌표값으로 변환
                   var convertPoint =
                     new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(latlng);
-                  // 포인트객체의 정보로 좌표값 변환 객체로 저장
                   var convertChange = new Tmapv2.LatLng(
                     convertPoint._lat,
                     convertPoint._lng
