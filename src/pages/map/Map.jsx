@@ -21,7 +21,7 @@ const Map = () => {
       //   var param = {
       //     name: "치안사고통계(전체)",
       //     serverUrl:
-      //       "www.safemap.go.kr/sm/apis.do?apikey=DFU3CGVL-DFU3-DFU3-DFU3-DFU3CGVLH9&layer=A2SM_CRMNLSTATS&style=A2SM_CrmnlStats_Tot",
+      //       "www.safemap.go.kr/sm/apis.do?apikey=DFU3CGVL-DFU3-DFU3-DFU3-DFU3CGVLH9",
       //     layername: "A2SM_CRMNLSTATS",
       //     styles: "A2SM_CrmnlStats_Tot",
       //   };
@@ -276,29 +276,22 @@ const Map = () => {
         var distance = marker_s
           .getPosition()
           .distanceTo(marker_e.getPosition());
-        console.log(distance);
+        console.log("거리: ", distance);
 
-        //원 - 출발지 기준
-        var circle = new Tmapv2.Circle({
-          center: new Tmapv2.LatLng(
-            marker_s.getPosition()._lat,
-            marker_s.getPosition()._lng
+        //사각형
+        var rect = new Tmapv2.Rectangle({
+          bounds: new Tmapv2.LatLngBounds(
+            new Tmapv2.LatLng(
+              marker_s.getPosition()._lat,
+              marker_s.getPosition()._lng
+            ),
+            new Tmapv2.LatLng(
+              marker_e.getPosition()._lat,
+              marker_e.getPosition()._lng
+            )
           ),
-          radius: distance / 2,
           strokeColor: "red",
-          fillColor: "greed",
-          map: map,
-        });
-
-        //원 - 도착지 기준
-        var circle = new Tmapv2.Circle({
-          center: new Tmapv2.LatLng(
-            marker_e.getPosition()._lat,
-            marker_e.getPosition()._lng
-          ),
-          radius: distance / 2,
-          strokeColor: "red",
-          fillColor: "greed",
+          fillColor: "green",
           map: map,
         });
 
@@ -317,7 +310,7 @@ const Map = () => {
         $.ajax({
           type: "POST",
           headers: headers,
-          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization10?version=1&format=json", //
+          url: "https://apis.openapi.sk.com/tmap/routes/routeOptimization20?version=1&format=json", //
           async: false,
           contentType: "application/json",
           data: JSON.stringify({
