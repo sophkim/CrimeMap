@@ -2,10 +2,21 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import "./map.css";
 import $ from "jquery";
-//import OpenLayers from "openlayers";
-//import proj4 from "proj4/dist/proj4";
 
 const { Tmapv2 } = window;
+
+const fetchData = async () => {
+  const response = await fetch("./cctv.json");
+  const latlng = await response.json();
+
+  const positions = [];
+
+  latlng.map((l) => {
+    positions.push({
+      latlng: new Tmapv2.maps.LatLng(l.lat, l.lng),
+    });
+  });
+};
 
 const Map = () => {
   useEffect(
@@ -15,30 +26,6 @@ const Map = () => {
         httpsMode: true,
         zoom: 15,
       });
-
-      // 생활안전지도
-      // function addWmsLayer() {
-      //   var param = {
-      //     name: "치안사고통계(전체)",
-      //     serverUrl:
-      //       "www.safemap.go.kr/sm/apis.do?apikey=DFU3CGVL-DFU3-DFU3-DFU3-DFU3CGVLH9",
-      //     layername: "A2SM_CRMNLSTATS",
-      //     styles: "A2SM_CrmnlStats_Tot",
-      //   };
-      //   var wmsLayer = new OpenLayers.Layer.WMS(
-      //     param.name,
-      //     param.serverUrl,
-      //     {
-      //       layers: "" + param.layername,
-      //       styles: param.styles,
-      //       format: "image/png",
-      //       exceptions: "text/xml",
-      //       transparent: true,
-      //     },
-      //     { isBaseLayer: false }
-      //   );
-      //   map.addLayer(wmsLayer);
-      // }
 
       // 출발지 설정 - POI 통합 검색 API 요청
       var markerArr = [];
