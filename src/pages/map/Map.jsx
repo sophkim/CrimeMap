@@ -5,19 +5,6 @@ import $ from "jquery";
 
 const { Tmapv2 } = window;
 
-const fetchData = async () => {
-  const response = await fetch("./cctv.json");
-  const latlng = await response.json();
-
-  const positions = [];
-
-  latlng.map((l) => {
-    positions.push({
-      latlng: new Tmapv2.maps.LatLng(l.lat, l.lng),
-    });
-  });
-};
-
 const Map = () => {
   useEffect(
     () => {
@@ -405,7 +392,7 @@ const Map = () => {
           <div className="rst mCustomScrollbar">
             <ul id="searchResult" name="searchResult">
               <p>
-                안전경로를 추천해 줍니다:)
+                안전경로를 추천해줍니다:)
                 <br />
                 우선 출발지와 도착지를 입력해주세요!
               </p>
